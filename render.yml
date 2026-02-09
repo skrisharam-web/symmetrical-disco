@@ -1,6 +1,6 @@
 databases:
   - name: jobportal-db
-    user: jobportal-user
+    user: jobportal
     plan: free
 
 services:
