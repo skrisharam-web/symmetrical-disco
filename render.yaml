@@ -1,19 +1,20 @@
 databases:
-  - name: jobportal-db-production
-    user: jobportal
+  - name: jobportal_db
+    user: jobportal_user
+    plan: free
     region: singapore
 
 services:
   - type: web
-    name: jobportal-backend-production
+    name: jobportal-backend
     env: python
     region: singapore
-    buildCommand: "cd backend && pip install -r requirements.txt && python manage.py collectstatic --no-input && python manage.py migrate"
+    buildCommand: "./backend/build.sh"
     startCommand: "cd backend && gunicorn config.wsgi:application"
     envVars:
       - key: DATABASE_URL
         fromDatabase:
-          name: jobportal-db-production
+          name: jobportal_db
           property: connectionString
       - key: SECRET_KEY
         generateValue: true
@@ -23,9 +24,11 @@ services:
         value: ".onrender.com localhost 127.0.0.1"
       - key: DB_ENGINE
         value: "django.db.backends.postgresql"
+      - key: PYTHON_VERSION
+        value: "3.11.0"
 
   - type: web
-    name: jobportal-frontend-production
+    name: jobportal-frontend
     env: static
     buildCommand: "cd frontend && npm install && npm run build"
     staticPublishPath: "./frontend/dist"
@@ -33,5 +36,5 @@ services:
       - key: VITE_API_URL
         fromService:
           type: web
-          name: jobportal-backend-production
+          name: jobportal-backend
           envVarKey: RENDER_EXTERNAL_URL
