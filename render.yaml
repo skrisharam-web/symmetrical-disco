@@ -1,13 +1,11 @@
 databases:
   - name: jobportal-db-final
     user: krisha
-    region: singapore
 
 services:
   - type: web
     name: jobportal-backend-final
     env: python
-    region: singapore
     buildCommand: "pip install -r requirements.txt && python manage.py collectstatic --no-input && python manage.py migrate"
     startCommand: "gunicorn config.wsgi:application"
     envVars:
