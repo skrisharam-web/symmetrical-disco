@@ -2,13 +2,11 @@ databases:
   - name: jobportal_db
     user: jobportal_user
     plan: free
-    region: singapore
 
 services:
   - type: web
     name: jobportal-backend
     env: python
-    region: singapore
     buildCommand: "./backend/build.sh"
     startCommand: "cd backend && gunicorn config.wsgi:application"
     envVars:
